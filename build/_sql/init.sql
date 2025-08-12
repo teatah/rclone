@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id VARCHAR(55) PRIMARY KEY,
+    username VARCHAR(55) NOT NULL UNIQUE,
+    password BYTEA NOT NULL
+);
+
+CREATE TABLE sessions (
+    id VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR(55) NOT NULL,
+    expires_at INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
