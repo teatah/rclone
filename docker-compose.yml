@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: pg
+    environment:
+      POSTGRES_DB: redditclone
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - '5432:5432'
+    volumes:
+      - './build/_sql/:/docker-entrypoint-initdb.d/'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_NAME}"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: 'mongo:latest'
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=redditclone
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - '27017-27019:27017-27019'
+
+  redditclone:
+    container_name: redditclone
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
