@@ -22,7 +22,7 @@ The application provides seamless CRUD (Create, Read, Update, Delete) operations
 
 ### Prerequisites
 
-1. **golang 1.24 or less**
+1. **golang 1.24 or more**
 2. **Docker**
 3. **Make**
 
